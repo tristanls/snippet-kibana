@@ -55,6 +55,15 @@ var SnippetKibana = module.exports = function SnippetKibana(options) {
     self.hostname = options.hostname || 'localhost';
     self.port = options.port || 8080;
     self.server = null;
+
+    self.onSIGINT = function () {
+        if (self.server) {
+            self.server.close(function () {
+                self.emit('close');
+            });
+        }
+    };
+    process.on('SIGINT', self.onSIGINT);
 };
 
 util.inherits(SnippetKibana, events.EventEmitter);
