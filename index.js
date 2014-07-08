@@ -85,5 +85,8 @@ SnippetKibana.prototype.listen = function listen(callback) {
     self.server = http.createServer(function (req, res) {
         self.kibana.serve(req, res);
     });
-    self.server.listen(self.port, self.hostname, callback);
+    self.server.listen(self.port, self.hostname, function () {
+        self.emit('listening', self.hostname, self.port);
+        callback ? callback() : undefined;
+    });
 };
